@@ -126,28 +126,42 @@ query_market() {
     echo ""
     echo -e "${BLUE}📈 查询中: $ticker ($market_name)...${NC}"
     
-    # 使用 Python 查询
+    # 使用虚拟环境中的 Python + yfinance 直接查询
+    if [ -f "$VENV_ACTIVATE" ]; then
+        source "$VENV_ACTIVATE"
+    fi
+    
     python3 << EOF
-import sys
-sys.path.insert(0, "$PROJECT_DIR")
-from tradingagents.dataflows.market_enums import detect_market, get_display_name
-from tradingagents.agents.utils.market_tools import get_market_stock_data
+import yfinance as yf
+from datetime import datetime, timedelta
 
 try:
-    market = detect_market("$ticker")
-    data = get_market_stock_data("$ticker")
+    # 获取最近30天数据
+    ticker = yf.Ticker("$ticker")
+    data = ticker.history(period="1mo")
     
-    if data:
+    if data is not None and not data.empty:
         print("\n✅ 数据获取成功!")
         print(f"\n数据预览:")
         print(f"  股票代码: $ticker")
-        print(f"  市场类型: {get_display_name('$ticker', market)}")
-        if 'current_price' in data:
-            print(f"  当前价格: \${data['current_price']:.2f}")
-        if 'daily' in data and len(data['daily']) > 0:
-            latest = data['daily'][-1]
-            print(f"  最新日期: {latest.get('date', 'N/A')}")
-            print(f"  收盘: \${latest.get('close', 0):.2f}")
+        print(f"  市场类型: $market_name")
+        
+        # 当前价格
+        current = data['Close'].iloc[-1]
+        print(f"  当前价格: \${current:.2f}")
+        
+        # 最新数据
+        latest = data.iloc[-1]
+        print(f"  最新日期: {latest.name.strftime('%Y-%m-%d')}")
+        print(f"  开盘: \${latest['Open']:.2f}")
+        print(f"  收盘: \${latest['Close']:.2f}")
+        print(f"  成交量: {latest['Volume']:,}")
+        
+        # 5日数据
+        print(f"\n最近5个交易日:")
+        for i in range(min(5, len(data))):
+            row = data.iloc[-(i+1)]
+            print(f"  {row.name.strftime('%Y-%m-%d')}: O:{row['Open']:.2f} H:{row['High']:.2f} L:{row['Low']:.2f} C:{row['Close']:.2f}")
     else:
         print("\n❌ 未获取到数据，请检查股票代码是否正确")
 except Exception as e:
