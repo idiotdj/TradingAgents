@@ -29,6 +29,7 @@ _PROVIDER_CONFIG = {
     "xai": ("https://api.x.ai/v1", "XAI_API_KEY"),
     "openrouter": ("https://openrouter.ai/api/v1", "OPENROUTER_API_KEY"),
     "ollama": ("http://localhost:11434/v1", None),
+    "minimax": ("https://api.minimax.chat/v1/text/chatcompletion_v2", "OPENAI_API_KEY"),
 }
 
 
