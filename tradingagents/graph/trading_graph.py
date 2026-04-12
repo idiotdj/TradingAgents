@@ -202,6 +202,8 @@ class TradingAgentsGraph:
         )
         args = self.propagator.get_graph_args()
 
+        print(f"\n🤖 开始分析 {company_name} ({trade_date})...")
+        
         if self.debug:
             # Debug mode with tracing
             trace = []

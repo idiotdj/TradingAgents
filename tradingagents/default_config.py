@@ -11,7 +11,7 @@ DEFAULT_CONFIG = {
     "llm_provider": "minimax",    # 使用 minimax
     "deep_think_llm": "MiniMax-M2.5",
     "quick_think_llm": "MiniMax-M2.5",
-    "backend_url": "https://api.minimax.chat/v1/text/chatcompletion_v2",
+    "backend_url": "https://api.minimax.chat/v1",
     # Provider-specific thinking configuration
     "google_thinking_level": None,      # "high", "minimal", etc.
     "openai_reasoning_effort": None,    # "medium", "high", "low"
