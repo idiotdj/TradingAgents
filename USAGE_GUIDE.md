@@ -256,7 +256,11 @@ TradingAgents/
 
 ---
 
-## 九、参考资源
+## 九、LLM 模型配置
+
+如需使用 MiniMax、Moonshot 等第三方模型，请参考 [minimax_guide.md](./minimax_guide.md)。
+
+## 十、参考资源
 
 - [TradingAgents 官方](https://github.com/TauricResearch/TradingAgents)
 - [yfinance](https://pypi.org/project/yfinance/)
@@ -264,5 +268,5 @@ TradingAgents/
 
 ---
 
-*文档版本: 1.0.0*  
+*文档版本: 1.0.1*  
 *最后更新: 2026-04-12*
