@@ -27,5 +27,8 @@ ta = TradingAgentsGraph(debug=True, config=config)
 _, decision = ta.propagate("PDD", "2026-04-12")
 print(decision)
 
+# Generate markdown report automatically
+ta.generate_markdown_report("2026-04-12")
+
 # Memorize mistakes and reflect
 # ta.reflect_and_remember(1000) # parameter is the position returns

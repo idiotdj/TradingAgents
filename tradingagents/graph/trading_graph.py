@@ -289,3 +289,63 @@ class TradingAgentsGraph:
     def process_signal(self, full_signal):
         """Process a signal to extract the core decision."""
         return self.signal_processor.process_signal(full_signal)
+
+    def generate_markdown_report(self, trade_date):
+        """Generate a Chinese markdown report from the analysis results."""
+        state = self.log_states_dict.get(str(trade_date))
+        if not state:
+            print("⚠️ 未找到分析结果")
+            return
+
+        # Extract key data
+        company = state.get("company_of_interest", "")
+        final_decision = state.get("final_trade_decision", "")
+        
+        # Extract investment decision summary
+        investment_plan = state.get("investment_plan", "")
+        trader_decision = state.get("trader_investment_decision", "")
+        risk_decision = state.get("risk_debate_state", {}).get("judge_decision", "")
+        
+        # Build markdown content
+        md_content = f"""# {company} 投资分析报告
+
+**分析日期**: {trade_date}  
+**股票代码**: {company}  
+**市场**: 美股 (NASDAQ)  
+
+---
+
+## 📊 执行摘要
+
+{final_decision[:500] if final_decision else "无"}
+
+---
+
+## 💰 投资决策
+
+**最终决策**: {trader_decision[:300] if trader_decision else "无"}
+
+**风险评估**: {risk_decision[:300] if risk_decision else "无"}
+
+---
+
+## 📈 投资计划
+
+{investment_plan[:500] if investment_plan else "无"}
+
+---
+
+*报告生成于 {trade_date}*  
+*数据来源: TradingAgents AI Agent 分析*
+"""
+        
+        # Save markdown report
+        directory = Path(self.config["results_dir"]) / self.ticker
+        directory.mkdir(parents=True, exist_ok=True)
+        
+        md_path = directory / f"analysis_report.md"
+        with open(md_path, "w", encoding="utf-8") as f:
+            f.write(md_content)
+        
+        print(f"\n📄 分析报告已生成: {md_path}")
+        return md_path
