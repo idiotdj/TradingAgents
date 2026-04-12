@@ -295,7 +295,7 @@
 - [x] 阶段3: 多市场 Agent 工具 (已完成: market_tools.py, 自动市场检测)
 - [x] 阶段4: 交易模拟器 (已完成: TradingSimulator, 多市场订单管理)
 - [x] 阶段5: 回测系统 (已完成: BacktestEngine, 评估指标)
-- [ ] 阶段6: 部署优化 (待开始)
+- [x] 阶段6: 部署优化 (已完成: FastAPI API 服务)
 
 ---
 
