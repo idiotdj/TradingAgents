@@ -68,8 +68,14 @@ def detect_market(ticker: str) -> MarketType:
         return MarketType.STOCK_CN_SZ
     
     # 检查美股 (纯字母)
-    if re.match(PATTERNS[MarketType.STOCK_US], ticker):
+    # 排除常见加密货币简称 (因为纯字母可能是 BTC, ETH 等)
+    crypto_common = {'BTC', 'ETH', 'XRP', 'DOGE', 'ADA', 'SOL', 'DOT', 'MATIC', 'LTC', 'AVAX'}
+    if re.match(PATTERNS[MarketType.STOCK_US], ticker) and ticker not in crypto_common:
         return MarketType.STOCK_US
+    
+    # 常见加密货币
+    if ticker in crypto_common:
+        return MarketType.CRYPTO_BTC
     
     return MarketType.UNKNOWN
 
@@ -100,6 +106,28 @@ def normalize_ticker(ticker: str, target_market: Optional[MarketType] = None) ->
     # 如果未指定目标市场,自动检测
     if target_market is None:
         target_market = detect_market(ticker)
+        
+        # 如果无法检测，根据内容特征猜测市场
+        if target_market == MarketType.UNKNOWN:
+            digits = re.sub(r'[^0-9]', '', ticker)
+            letters = re.sub(r'[^A-Z]', '', ticker)
+            
+            # 纯数字: 可能是港股或A股
+            if digits.isdigit():
+                if len(digits) <= 5:
+                    # 5位或更少，假设为港股
+                    target_market = MarketType.STOCK_HK
+                elif len(digits) == 6:
+                    # 6位数字，根据首位判断市场
+                    if digits[0] in ('0', '3'):
+                        # 0/3 开头通常是深圳
+                        target_market = MarketType.STOCK_CN_SZ
+                    else:
+                        # 其他开头通常是上海
+                        target_market = MarketType.STOCK_CN_SH
+            # 纯字母: 可能是加密货币 (需要加 -USD)
+            elif letters and len(letters) <= 10 and '-' not in ticker:
+                target_market = MarketType.CRYPTO_BTC
     
     if target_market == MarketType.STOCK_US:
         # 美股: 保持纯字母格式
