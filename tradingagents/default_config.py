@@ -9,8 +9,8 @@ DEFAULT_CONFIG = {
     ),
     # LLM settings
     "llm_provider": "openrouter",    # 使用 OpenRouter
-    "deep_think_llm": "z-ai/glm-4.5-air:free",
-    "quick_think_llm": "z-ai/glm-4.5-air:free",
+    "deep_think_llm": "minimax/minimax-m2.5:free",
+    "quick_think_llm": "minimax/minimax-m2.5:free",
     "backend_url": None,  # 使用 openai_client.py 中的默认配置
     # Provider-specific thinking configuration
     "google_thinking_level": None,      # "high", "minimal", etc.
@@ -18,7 +18,7 @@ DEFAULT_CONFIG = {
     "anthropic_effort": None,           # "high", "medium", "low"
     # Output language for analyst reports and final decision
     # Internal agent debate stays in English for reasoning quality
-    "output_language": "Chinese",
+    "output_language": "English",
     # Debate and discussion settings
     "max_debate_rounds": 1,
     "max_risk_discuss_rounds": 1,
