@@ -8,10 +8,10 @@ DEFAULT_CONFIG = {
         "dataflows/data_cache",
     ),
     # LLM settings
-    "llm_provider": "minimax",    # 使用 minimax
-    "deep_think_llm": "MiniMax-M2.5",
-    "quick_think_llm": "MiniMax-M2.5",
-    "backend_url": "https://api.minimax.chat/v1",
+    "llm_provider": "openrouter",    # 使用 OpenRouter
+    "deep_think_llm": "minimax/minimax-m2.5:free",
+    "quick_think_llm": "minimax/minimax-m2.5:free",
+    "backend_url": None,  # 使用 openai_client.py 中的默认配置
     # Provider-specific thinking configuration
     "google_thinking_level": None,      # "high", "minimal", etc.
     "openai_reasoning_effort": None,    # "medium", "high", "low"

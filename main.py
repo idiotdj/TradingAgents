@@ -25,8 +25,6 @@ print(f"📊 分析股票: {stock_code} | 日期: {trade_date}")
 
 # Create a custom config
 config = DEFAULT_CONFIG.copy()
-config["deep_think_llm"] = "MiniMax-M2.5"  # MiniMax model
-config["quick_think_llm"] = "MiniMax-M2.5"  # MiniMax model
 config["max_debate_rounds"] = 1  # Increase debate rounds
 
 # Configure data vendors (default uses yfinance, no extra API keys needed)
