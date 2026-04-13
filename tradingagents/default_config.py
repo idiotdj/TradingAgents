@@ -9,8 +9,8 @@ DEFAULT_CONFIG = {
     ),
     # LLM settings
     "llm_provider": "openrouter",    # 使用 OpenRouter
-    "deep_think_llm": "minimax/minimax-m2.5:free",
-    "quick_think_llm": "minimax/minimax-m2.5:free",
+    "deep_think_llm": "qwen/qwen2.5:7b",
+    "quick_think_llm": "qwen/qwen2.5:7b",
     "backend_url": None,  # 使用 openai_client.py 中的默认配置
     # Provider-specific thinking configuration
     "google_thinking_level": None,      # "high", "minimal", etc.
