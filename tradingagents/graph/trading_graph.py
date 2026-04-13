@@ -290,6 +290,16 @@ class TradingAgentsGraph:
         """Process a signal to extract the core decision."""
         return self.signal_processor.process_signal(full_signal)
 
+    def _clean_llm_content(self, text: str) -> str:
+        """Remove LLM thinking tokens from text."""
+        if not text:
+            return ""
+        import re
+        # Remove思考标签和内容
+        cleaned = re.sub(r'<think>.*?', '', text, flags=re.DOTALL)
+        cleaned = re.sub(r'\n+', '\n', cleaned.strip())
+        return cleaned
+
     def generate_markdown_report(self, trade_date):
         """Generate a Chinese markdown report from the analysis results."""
         state = self.log_states_dict.get(str(trade_date))
@@ -299,14 +309,14 @@ class TradingAgentsGraph:
 
         # Extract key data
         company = state.get("company_of_interest", "")
-        final_decision = state.get("final_trade_decision", "")
+        final_decision = self._clean_llm_content(state.get("final_trade_decision", ""))
         
         # Extract investment decision summary
-        investment_plan = state.get("investment_plan", "")
-        trader_decision = state.get("trader_investment_decision", "")
-        risk_decision = state.get("risk_debate_state", {}).get("judge_decision", "")
+        investment_plan = self._clean_llm_content(state.get("investment_plan", ""))
+        trader_decision = self._clean_llm_content(state.get("trader_investment_decision", ""))
+        risk_decision = self._clean_llm_content(state.get("risk_debate_state", {}).get("judge_decision", ""))
         
-        # Build markdown content
+        # Build markdown content - take first 800 chars of cleaned content
         md_content = f"""# {company} 投资分析报告
 
 **分析日期**: {trade_date}  
@@ -317,21 +327,23 @@ class TradingAgentsGraph:
 
 ## 📊 执行摘要
 
-{final_decision[:500] if final_decision else "无"}
+{final_decision[:800] if final_decision else "无"}
 
 ---
 
 ## 💰 投资决策
 
-**最终决策**: {trader_decision[:300] if trader_decision else "无"}
+**最终决策**: 
+{trader_decision[:800] if trader_decision else "无"}
 
-**风险评估**: {risk_decision[:300] if risk_decision else "无"}
+**风险评估**: 
+{risk_decision[:800] if risk_decision else "无"}
 
 ---
 
 ## 📈 投资计划
 
-{investment_plan[:500] if investment_plan else "无"}
+{investment_plan[:800] if investment_plan else "无"}
 
 ---
 
